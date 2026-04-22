@@ -92,6 +92,7 @@ describe('runReview', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     const instance = new Anthropic({ apiKey: 'test' });
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     createMock = instance.messages.create as ReturnType<typeof vi.fn>;
   });
 

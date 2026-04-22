@@ -132,7 +132,7 @@ describe('buildUserPrompt', () => {
   it('shows truncated note for truncated files', () => {
     const ctx = {
       ...mockContext,
-      files: [{ ...mockContext.files[0]!, isTruncated: true }],
+      files: [{ ...mockContext.files[0], isTruncated: true }],
     };
     const prompt = buildUserPrompt(ctx, mockInputs);
     expect(prompt).toContain('truncated');

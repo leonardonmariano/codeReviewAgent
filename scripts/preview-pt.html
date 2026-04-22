@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PR Review Bot — Preview PT</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 24px 16px 60px;
+  }
+
+  a { color: #58a6ff; text-decoration: none; }
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px;
+    background: #21262d;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #e6edf3;
+  }
+
+  .page-header {
+    max-width: 980px; margin: 0 auto 16px;
+    display: flex; align-items: center; gap: 8px;
+    color: #8b949e; font-size: 13px; flex-wrap: wrap;
+  }
+  .repo-link { color: #58a6ff; font-weight: 600; font-size: 16px; }
+  .pr-title-text { color: #e6edf3; font-weight: 600; font-size: 16px; }
+  .pr-number { color: #8b949e; font-weight: 400; }
+
+  .pr-meta {
+    max-width: 980px; margin: 0 auto 20px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .badge-open {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: #1c4a2a; border: 1px solid #238636; color: #3fb950;
+  }
+  .pr-meta-text { color: #8b949e; font-size: 13px; }
+  .pr-meta-text strong { color: #e6edf3; }
+  .branch-tag {
+    background: #21262d; padding: 1px 7px; border-radius: 4px;
+    font-family: monospace; font-size: 12px; color: #58a6ff;
+  }
+
+  .status-checks {
+    max-width: 980px; margin: 0 auto 20px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden;
+  }
+  .status-header {
+    padding: 10px 16px; border-bottom: 1px solid #30363d;
+    font-weight: 600; color: #e6edf3; display: flex; align-items: center; gap: 8px;
+  }
+  .check-row {
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #21262d; font-size: 13px;
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-name { flex: 1; color: #e6edf3; }
+  .check-detail { color: #8b949e; font-size: 12px; }
+
+  .timeline { max-width: 980px; margin: 0 auto; }
+
+  .comment { display: flex; gap: 12px; margin-bottom: 16px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; border: 2px solid #30363d;
+  }
+  .av-bot { background: linear-gradient(135deg, #6e40c9, #1f6feb); }
+  .av-human { background: linear-gradient(135deg, #238636, #0d4429); }
+
+  .comment-box { flex: 1; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
+  .comment-header {
+    background: #161b22; border-bottom: 1px solid #30363d;
+    padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .comment-author { font-weight: 600; color: #e6edf3; }
+  .bot-tag {
+    background: #1f6feb22; border: 1px solid #1f6feb55; color: #58a6ff;
+    font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 20px; margin-left: 6px;
+  }
+  .comment-body { padding: 16px 20px; background: #0d1117; }
+
+  .bot-banner {
+    text-align: center; margin-bottom: 20px; padding: 14px 14px 10px;
+    background: linear-gradient(135deg, #12172a, #0d1117);
+    border: 1px solid #30363d; border-radius: 6px;
+  }
+  .bot-banner-title { font-size: 15px; font-weight: 700; color: #e6edf3; margin-top: 8px; letter-spacing: .3px; }
+  .bot-banner-sub { font-size: 12px; color: #8b949e; margin-top: 2px; }
+
+  .review-section { margin-bottom: 22px; }
+  .section-heading {
+    font-size: 15px; font-weight: 700; color: #e6edf3;
+    padding-bottom: 7px; margin-bottom: 12px; border-bottom: 1px solid #21262d;
+  }
+  p { margin-bottom: 10px; color: #c9d1d9; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  ul li { margin-bottom: 6px; color: #c9d1d9; }
+  ul li strong { color: #e6edf3; }
+
+  .score-card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 18px 22px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  }
+  .score-label { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: #8b949e; font-weight: 600; margin-bottom: 4px; }
+  .score-num { font-size: 32px; font-weight: 800; color: #f0a030; line-height: 1; }
+  .score-bar { display: flex; gap: 3px; margin-top: 6px; }
+  .bar-seg { width: 18px; height: 7px; border-radius: 2px; }
+  .bar-on { background: #f0a030; }
+  .bar-off { background: #21262d; }
+
+  .verdict-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 13px;
+  }
+  .v-suggestions { background: #2d2a14; border: 1.5px solid #9e6a03; color: #d29922; }
+
+  .stat-block .stat-val { font-size: 26px; font-weight: 800; line-height: 1; margin-top: 4px; }
+  .stat-warn { color: #f85149; }
+  .stat-dim  { color: #8b949e; font-size: 18px !important; }
+
+  .sec-table { width: 100%; border-collapse: collapse; }
+  .sec-table td { padding: 7px 10px; border-bottom: 1px solid #21262d; color: #c9d1d9; font-size: 13px; }
+  .sec-table tr:last-child td { border-bottom: none; }
+  .sec-table td:first-child { font-weight: 600; color: #e6edf3; width: 260px; }
+  .sec-table td:last-child { text-align: right; }
+  .s-ok   { color: #3fb950; }
+  .s-warn { color: #d29922; }
+
+  pre {
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px;
+    padding: 14px 16px; overflow-x: auto; margin: 10px 0;
+  }
+  pre code { background: none; padding: 0; font-size: 12.5px; color: #e6edf3; }
+  .kw  { color: #ff7b72; }
+  .ty  { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .fn  { color: #d2a8ff; }
+  .cm  { color: #8b949e; font-style: italic; }
+  .num { color: #f2cc60; }
+
+  .inline-comment {
+    background: #161b22; border: 1px solid #30363d;
+    border-left: 3px solid #1f6feb; border-radius: 4px;
+    padding: 10px 14px; margin-bottom: 8px;
+  }
+  .file-ref { font-family: monospace; font-size: 11px; color: #58a6ff; margin-bottom: 5px; }
+  .ic-body { color: #c9d1d9; font-size: 13px; }
+
+  hr { border: none; border-top: 1px solid #21262d; margin: 18px 0; }
+  .comment-footer { margin-top: 14px; font-size: 12px; color: #8b949e; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="#" class="repo-link">acme-corp / payments-api</a>
+  <span>›</span><span>Pull requests</span><span>›</span>
+  <span class="pr-title-text">feat: adicionar lógica de retry com backoff exponencial <span class="pr-number">#87</span></span>
+</div>
+
+<div class="pr-meta">
+  <span class="badge-open">● Aberto</span>
+  <span class="pr-meta-text">
+    <strong>maria-santos</strong> quer fazer merge de 3 commits em
+    <span class="branch-tag">main</span> a partir de <span class="branch-tag">feat/payment-retry</span>
+    &nbsp;·&nbsp; aberto há 2 horas &nbsp;·&nbsp; +121 / -7 &nbsp;·&nbsp; 3 arquivos alterados
+  </span>
+</div>
+
+<div class="status-checks">
+  <div class="status-header"><span style="color:#3fb950">✓</span> Todas as verificações passaram</div>
+  <div class="check-row">
+    <span style="color:#3fb950;font-size:15px">✓</span>
+    <span class="check-name">CI / Testes &amp; Lint</span>
+    <span class="check-detail">Passou — 2m 14s</span>
+  </div>
+  <div class="check-row">
+    <span style="color:#d29922;font-size:15px">◐</span>
+    <span class="check-name">pr-review-bot / ai-review</span>
+    <span class="check-detail">Nota: 7/10 — 1 problema crítico encontrado</span>
+  </div>
+</div>
+
+<div class="timeline">
+
+  <div class="comment" style="margin-bottom:20px">
+    <div class="avatar av-human">🧑</div>
+    <div class="comment-box">
+      <div class="comment-header">
+        <span class="comment-author">maria-santos</span>
+        <span style="color:#8b949e;font-size:12px">há 2 horas</span>
+      </div>
+      <div class="comment-body">
+        <p>Corrige as falhas silenciosas de pagamento da semana passada (alerta Grafana #204).</p>
+        <p style="margin:0">O retry envolve a chamada ao gateway com backoff exponencial: 500ms → 1s → 2s. Erros não-retentáveis (cartão recusado, CVV inválido) falham imediatamente sem retry.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="comment">
+    <div class="avatar av-bot">🤖</div>
+    <div class="comment-box">
+      <div class="comment-header">
+        <div>
+          <span class="comment-author">pr-review-bot</span><span class="bot-tag">bot</span>
+          <span style="color:#8b949e;font-size:12px;margin-left:8px">agora mesmo</span>
+        </div>
+        <span style="color:#8b949e;font-size:12px">editado</span>
+      </div>
+      <div class="comment-body">
+
+        <div class="bot-banner">
+          <div style="font-size:28px">🤖</div>
+          <div class="bot-banner-title">PR Review Bot</div>
+          <div class="bot-banner-sub">Movido por IA · Powered by Claude</div>
+        </div>
+
+        <hr />
+
+        <div class="review-section">
+          <div class="section-heading">📋 Resumo</div>
+          <p>Este PR adiciona lógica de retry com backoff exponencial ao <code>PaymentService</code>, corrigindo falhas silenciosas de pagamento causadas por timeouts no gateway. A implementação é bem estruturada, com boa separação de responsabilidades e testes cobrindo os cenários principais. A única preocupação bloqueante é a detecção de erros não-retentáveis por correspondência de string, que pode causar cobranças duplicadas em produção.</p>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">✅ Pontos Positivos</div>
+          <ul>
+            <li>Ótima separação: <code>withRetry</code> é um utilitário genérico e reutilizável, enquanto <code>isNonRetryable</code> encapsula a lógica de domínio de pagamentos</li>
+            <li><code>RetryExhaustedError</code> preserva o <code>lastError</code> original, facilitando muito o diagnóstico em produção</li>
+            <li>Testes cobrem os 4 cenários críticos: sucesso, retry em falha transiente, esgotamento e bypass de retry</li>
+            <li>Uso correto de <code>Math.pow(2, attempt - 1)</code> para backoff — evita sobrecarga no gateway em falhas em massa</li>
+          </ul>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">🚨 Problemas Críticos</div>
+          <ul>
+            <li>
+              <strong><code>src/services/payment.service.ts:18</code></strong> —
+              <code>isNonRetryable</code> usa <code>err.message.includes(code)</code> para detectar erros não-retentáveis.
+              Se o gateway de pagamento alterar o texto da mensagem de erro, cartões recusados serão retentados 3 vezes,
+              podendo causar <strong>cobranças duplicadas em produção</strong>. Use códigos de erro estruturados.
+            </li>
+          </ul>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">⚠️ Melhorias Sugeridas</div>
+          <ul>
+            <li>Adicionar jitter ao delay — <code>delay * (0.8 + Math.random() * 0.4)</code> — para evitar thundering herd quando múltiplos pagamentos falham ao mesmo tempo</li>
+            <li><code>RetryExhaustedError</code> nunca é lançado — o loop relança <code>lastError</code> diretamente. Remova a classe ou corrija o fluxo para usá-la</li>
+            <li>Logar tentativas de retry em nível <code>warn</code> para observabilidade em produção</li>
+            <li>Expor <code>maxDelayMs</code> como opção para limitar o delay em cenários de alta latência</li>
+          </ul>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">💡 Sugestões com Código</div>
+          <p><strong>Use códigos estruturados em vez de correspondência de string:</strong></p>
+<pre><code><span class="kw">const</span> NON_RETRYABLE_CODES = <span class="kw">new</span> <span class="ty">Set</span>([
+  <span class="str">'card_declined'</span>,
+  <span class="str">'invalid_cvv'</span>,
+  <span class="str">'expired_card'</span>,
+  <span class="str">'insufficient_funds'</span>,
+]);
+
+<span class="kw">function</span> <span class="fn">isNonRetryable</span>(err: <span class="ty">unknown</span>): <span class="ty">boolean</span> {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> <span class="ty">GatewayError</span>) {
+    <span class="kw">return</span> NON_RETRYABLE_CODES.<span class="fn">has</span>(err.code); <span class="cm">// seguro, o código não muda silenciosamente</span>
+  }
+  <span class="kw">return false</span>;
+}</code></pre>
+          <p><strong>Adicionar jitter para evitar thundering herd:</strong></p>
+<pre><code><span class="cm">// Antes: const delay = baseDelayMs * Math.pow(2, attempt - 1);</span>
+<span class="kw">const</span> jitter = <span class="num">0.8</span> + Math.<span class="fn">random</span>() * <span class="num">0.4</span>; <span class="cm">// aleatório entre 80%–120%</span>
+<span class="kw">const</span> delay = baseDelayMs * Math.<span class="fn">pow</span>(<span class="num">2</span>, attempt - <span class="num">1</span>) * jitter;</code></pre>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">🔒 Checklist de Segurança</div>
+          <table class="sec-table">
+            <tr><td>SQL Injection</td><td class="s-ok">✅ Não aplicável</td></tr>
+            <tr><td>XSS / Injeção de HTML</td><td class="s-ok">✅ Não aplicável</td></tr>
+            <tr><td>Secrets / credenciais expostas</td><td class="s-ok">✅ Nenhum no diff</td></tr>
+            <tr><td>Validação de input</td><td class="s-warn">⚠️ String matching frágil em <code>isNonRetryable</code></td></tr>
+            <tr><td>Autenticação / Autorização</td><td class="s-ok">✅ Não alterado neste PR</td></tr>
+            <tr><td>Dados sensíveis em logs</td><td class="s-ok">✅ Nenhum dado sensível logado</td></tr>
+            <tr><td>Vulnerabilidades de dependências</td><td class="s-ok">✅ Nenhuma nova dependência</td></tr>
+          </table>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">📊 Avaliação Final</div>
+          <div class="score-card">
+            <div>
+              <div class="score-label">Nota</div>
+              <div class="score-num">7/10</div>
+              <div class="score-bar">
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-off"></div>
+                <div class="bar-seg bar-off"></div><div class="bar-seg bar-off"></div>
+              </div>
+            </div>
+            <div>
+              <div class="score-label">Veredicto</div>
+              <div style="margin-top:4px"><span class="verdict-badge v-suggestions">⚠️ APROVADO COM SUGESTÕES</span></div>
+            </div>
+            <div class="stat-block">
+              <div class="score-label">Problemas Críticos</div>
+              <div class="stat-val stat-warn">1</div>
+            </div>
+            <div class="stat-block">
+              <div class="score-label">Tempo de Review</div>
+              <div class="stat-val stat-dim">31s</div>
+            </div>
+          </div>
+          <p>Boa implementação que resolve um problema real de produção. O único bloqueio é a detecção de erros não-retentáveis por string — sem correção, pode gerar cobranças duplicadas em cartões recusados. As demais sugestões são melhorias não-bloqueantes.</p>
+        </div>
+
+        <div class="review-section">
+          <div class="section-heading">🔍 Comentários Inline</div>
+          <div class="inline-comment">
+            <div class="file-ref">📄 src/services/payment.service.ts · linha 18</div>
+            <div class="ic-body">⚠️ <code>err.message.includes(code)</code> é frágil — se o gateway mudar o texto do erro, cartões recusados serão retentados 3x. Use <code>err instanceof GatewayError && NON_RETRYABLE_CODES.has(err.code)</code> no lugar.</div>
+          </div>
+          <div class="inline-comment">
+            <div class="file-ref">📄 src/utils/retry.ts · linha 38</div>
+            <div class="ic-body">Este <code>throw</code> nunca é alcançado — o erro original é relançado dentro do loop na última tentativa. Remova <code>RetryExhaustedError</code> ou corrija o fluxo para que ela seja lançada aqui.</div>
+          </div>
+        </div>
+
+        <hr />
+        <div class="comment-footer">
+          🕐 Revisado em Ter, 22 Abr 2026 13:45:02 UTC &nbsp;·&nbsp;
+          Powered by <a href="#">Claude</a> via <a href="#">PR Review Bot</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:980px;margin:40px auto 0;text-align:center;padding:28px 0 10px">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#8b949e;margin-bottom:10px;font-weight:600">Criado por</div>
+    <div style="font-size:28px;font-weight:800;background:linear-gradient(90deg,#58a6ff,#a371f7,#f778ba);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px">
+      Leonardo
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:#8b949e">
+      Review de código com IA para PRs do GitHub &nbsp;·&nbsp; <a href="#" style="color:#58a6ff">github.com/leonardo</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "pr-review-bot",
+  "version": "1.0.0",
+  "description": "AI-powered code review using Claude. Acts like a senior developer reviewing your PRs.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js --minify --external:@actions/core --external:@actions/github",
+    "build:debug": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js --sourcemap",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src tests --ext .ts",
+    "lint:fix": "eslint src tests --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "rm -rf dist && mkdir -p dist",
+    "simulate": "tsx scripts/simulate.ts",
+    "simulate:mock": "tsx scripts/simulate-mock.ts"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "dotenv": "^17.4.2",
+    "esbuild": "^0.24.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

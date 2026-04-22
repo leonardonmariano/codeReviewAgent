@@ -1,0 +1,58 @@
+name: 'PR Review Bot'
+description: 'AI-powered PR code review using Claude — posts structured review comments with score and inline suggestions.'
+author: 'PR Review Bot'
+
+branding:
+  icon: 'code'
+  color: 'purple'
+
+inputs:
+  github-token:
+    description: 'GitHub token for posting comments and setting commit status. Use ${{ secrets.GITHUB_TOKEN }}.'
+    required: true
+
+  anthropic-api-key:
+    description: 'Anthropic API key for Claude. Store in repository secrets.'
+    required: true
+
+  max-files:
+    description: 'Maximum number of files to include in the review. Files beyond this limit are skipped.'
+    required: false
+    default: '30'
+
+  max-diff-lines:
+    description: 'Maximum number of diff lines per file. Larger diffs are truncated with a notice.'
+    required: false
+    default: '500'
+
+  severity-threshold:
+    description: 'Minimum severity level to report. "critical" only shows blocking issues; "warning" shows all issues.'
+    required: false
+    default: 'warning'
+
+  ignored-patterns:
+    description: |
+      Newline-separated list of regex patterns for files to exclude from review.
+      Example:
+        ^docs/
+        \.generated\.ts$
+        ^migrations/
+    required: false
+    default: ''
+
+outputs:
+  verdict:
+    description: 'Review verdict: APPROVED, APPROVED_WITH_SUGGESTIONS, or CHANGES_REQUESTED.'
+
+  score:
+    description: 'Review score from 1 to 10.'
+
+  critical-issues:
+    description: 'Number of critical issues found.'
+
+  review-url:
+    description: 'URL of the PR where the review was posted.'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

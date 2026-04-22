@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PR Review Bot — Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 24px 16px 60px;
+  }
+
+  a { color: #58a6ff; text-decoration: none; }
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 12px;
+    background: #21262d;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #e6edf3;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    max-width: 980px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8b949e;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .repo-link { color: #58a6ff; font-weight: 600; font-size: 16px; }
+  .pr-title-text { color: #e6edf3; font-weight: 600; font-size: 16px; }
+  .pr-number { color: #8b949e; font-weight: 400; }
+
+  /* ── PR meta ── */
+  .pr-meta {
+    max-width: 980px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .badge-open {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: #1c4a2a; border: 1px solid #238636; color: #3fb950;
+  }
+  .pr-meta-text { color: #8b949e; font-size: 13px; }
+  .pr-meta-text strong { color: #e6edf3; }
+  .branch-tag {
+    background: #21262d; padding: 1px 7px; border-radius: 4px;
+    font-family: monospace; font-size: 12px; color: #58a6ff;
+  }
+
+  /* ── Status checks ── */
+  .status-checks {
+    max-width: 980px; margin: 0 auto 20px;
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden;
+  }
+  .status-header {
+    padding: 10px 16px; border-bottom: 1px solid #30363d;
+    font-weight: 600; color: #e6edf3; display: flex; align-items: center; gap: 8px;
+  }
+  .check-row {
+    padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #21262d; font-size: 13px;
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-name { flex: 1; color: #e6edf3; }
+  .check-detail { color: #8b949e; font-size: 12px; }
+
+  /* ── Timeline ── */
+  .timeline { max-width: 980px; margin: 0 auto; }
+
+  /* ── Comment ── */
+  .comment { display: flex; gap: 12px; margin-bottom: 16px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; border: 2px solid #30363d;
+  }
+  .av-bot { background: linear-gradient(135deg, #6e40c9, #1f6feb); }
+  .av-human { background: linear-gradient(135deg, #238636, #0d4429); }
+
+  .comment-box { flex: 1; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
+  .comment-header {
+    background: #161b22; border-bottom: 1px solid #30363d;
+    padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .comment-author { font-weight: 600; color: #e6edf3; }
+  .bot-tag {
+    background: #1f6feb22; border: 1px solid #1f6feb55; color: #58a6ff;
+    font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 20px; margin-left: 6px;
+  }
+  .comment-body { padding: 16px 20px; background: #0d1117; }
+
+  /* ── Bot banner ── */
+  .bot-banner {
+    text-align: center; margin-bottom: 20px; padding: 14px 14px 10px;
+    background: linear-gradient(135deg, #12172a, #0d1117);
+    border: 1px solid #30363d; border-radius: 6px;
+  }
+  .bot-banner-title {
+    font-size: 15px; font-weight: 700; color: #e6edf3; margin-top: 8px;
+    letter-spacing: .3px;
+  }
+  .bot-banner-sub { font-size: 12px; color: #8b949e; margin-top: 2px; }
+
+  /* ── Sections ── */
+  .review-section { margin-bottom: 22px; }
+  .section-heading {
+    font-size: 15px; font-weight: 700; color: #e6edf3;
+    padding-bottom: 7px; margin-bottom: 12px; border-bottom: 1px solid #21262d;
+  }
+  p { margin-bottom: 10px; color: #c9d1d9; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  ul li { margin-bottom: 6px; color: #c9d1d9; }
+  ul li strong { color: #e6edf3; }
+
+  /* ── Score card ── */
+  .score-card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 18px 22px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  }
+  .score-label { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: #8b949e; font-weight: 600; margin-bottom: 4px; }
+  .score-num { font-size: 32px; font-weight: 800; color: #f0a030; line-height: 1; }
+  .score-bar { display: flex; gap: 3px; margin-top: 6px; }
+  .bar-seg { width: 18px; height: 7px; border-radius: 2px; }
+  .bar-on { background: #f0a030; }
+  .bar-off { background: #21262d; }
+
+  .verdict-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 13px;
+  }
+  .v-suggestions { background: #2d2a14; border: 1.5px solid #9e6a03; color: #d29922; }
+  .v-approved    { background: #1c4a2a; border: 1.5px solid #238636; color: #3fb950; }
+  .v-changes     { background: #3a1414; border: 1.5px solid #da3633; color: #f85149; }
+
+  .stat-block .stat-val { font-size: 26px; font-weight: 800; line-height: 1; margin-top: 4px; }
+  .stat-warn { color: #f85149; }
+  .stat-ok   { color: #3fb950; }
+  .stat-dim  { color: #8b949e; font-size: 18px !important; }
+
+  /* ── Security table ── */
+  .sec-table { width: 100%; border-collapse: collapse; }
+  .sec-table td { padding: 7px 10px; border-bottom: 1px solid #21262d; color: #c9d1d9; font-size: 13px; }
+  .sec-table tr:last-child td { border-bottom: none; }
+  .sec-table td:first-child { font-weight: 600; color: #e6edf3; width: 230px; }
+  .sec-table td:last-child { text-align: right; }
+  .s-ok   { color: #3fb950; }
+  .s-warn { color: #d29922; }
+  .s-err  { color: #f85149; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: #161b22; border: 1px solid #30363d; border-radius: 6px;
+    padding: 14px 16px; overflow-x: auto; margin: 10px 0;
+  }
+  pre code {
+    background: none; padding: 0; font-size: 12.5px; color: #e6edf3;
+  }
+  .kw  { color: #ff7b72; }
+  .ty  { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .fn  { color: #d2a8ff; }
+  .cm  { color: #8b949e; font-style: italic; }
+  .num { color: #f2cc60; }
+
+  /* ── Inline comments ── */
+  .inline-comment {
+    background: #161b22; border: 1px solid #30363d;
+    border-left: 3px solid #1f6feb; border-radius: 4px;
+    padding: 10px 14px; margin-bottom: 8px;
+  }
+  .file-ref { font-family: monospace; font-size: 11px; color: #58a6ff; margin-bottom: 5px; }
+  .ic-body { color: #c9d1d9; font-size: 13px; }
+
+  hr { border: none; border-top: 1px solid #21262d; margin: 18px 0; }
+
+  .comment-footer { margin-top: 14px; font-size: 12px; color: #8b949e; }
+</style>
+</head>
+<body>
+
+<!-- Page header -->
+<div class="page-header">
+  <a href="#" class="repo-link">acme-corp / payments-api</a>
+  <span>›</span><span>Pull requests</span><span>›</span>
+  <span class="pr-title-text">feat: add payment retry logic with exponential backoff <span class="pr-number">#87</span></span>
+</div>
+
+<div class="pr-meta">
+  <span class="badge-open">● Open</span>
+  <span class="pr-meta-text">
+    <strong>maria-santos</strong> wants to merge 3 commits into
+    <span class="branch-tag">main</span> from <span class="branch-tag">feat/payment-retry</span>
+    &nbsp;·&nbsp; opened 2 hours ago &nbsp;·&nbsp; +121 / -7 &nbsp;·&nbsp; 3 files changed
+  </span>
+</div>
+
+<!-- Status checks -->
+<div class="status-checks">
+  <div class="status-header"><span style="color:#3fb950">✓</span> All checks have passed</div>
+  <div class="check-row">
+    <span style="color:#3fb950;font-size:15px">✓</span>
+    <span class="check-name">CI / Test &amp; Lint</span>
+    <span class="check-detail">Passing — 2m 14s</span>
+  </div>
+  <div class="check-row">
+    <span style="color:#d29922;font-size:15px">◐</span>
+    <span class="check-name">pr-review-bot / ai-review</span>
+    <span class="check-detail">Score: 7/10 — 1 critical issue found</span>
+  </div>
+</div>
+
+<div class="timeline">
+
+  <!-- Human comment -->
+  <div class="comment" style="margin-bottom:20px">
+    <div class="avatar av-human">🧑</div>
+    <div class="comment-box">
+      <div class="comment-header">
+        <span class="comment-author">maria-santos</span>
+        <span style="color:#8b949e;font-size:12px">2 hours ago</span>
+      </div>
+      <div class="comment-body">
+        <p>Fixes the silent payment failures from last week (Grafana alert #204).</p>
+        <p style="margin:0">Retry wraps the gateway call with exponential backoff: 500ms → 1s → 2s. Non-retryable errors (card declined, invalid CVV) fail fast without retrying.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bot review -->
+  <div class="comment">
+    <div class="avatar av-bot">🤖</div>
+    <div class="comment-box">
+      <div class="comment-header">
+        <div>
+          <span class="comment-author">pr-review-bot</span><span class="bot-tag">bot</span>
+          <span style="color:#8b949e;font-size:12px;margin-left:8px">just now</span>
+        </div>
+        <span style="color:#8b949e;font-size:12px">edited</span>
+      </div>
+      <div class="comment-body">
+
+        <!-- Banner -->
+        <div class="bot-banner">
+          <div style="font-size:28px">🤖</div>
+          <div class="bot-banner-title">PR Review Bot</div>
+          <div class="bot-banner-sub">AI-powered · Powered by Claude</div>
+        </div>
+
+        <hr />
+
+        <!-- Summary -->
+        <div class="review-section">
+          <div class="section-heading">📋 Summary</div>
+          <p>This PR adds exponential backoff retry logic to <code>PaymentService</code>, fixing silent payment failures caused by gateway timeouts. The implementation is well-structured with a clean separation of concerns and tests covering the key scenarios. The only blocking concern is non-retryable error detection via string matching, which could cause duplicate charges in production.</p>
+        </div>
+
+        <!-- Positives -->
+        <div class="review-section">
+          <div class="section-heading">✅ What's Good</div>
+          <ul>
+            <li>Clean separation: <code>withRetry</code> is a generic, reusable utility while <code>isNonRetryable</code> encapsulates payment domain logic</li>
+            <li><code>RetryExhaustedError</code> preserves the original <code>lastError</code>, making production debugging much easier</li>
+            <li>Tests cover all 4 critical scenarios: success, retry on transient failure, exhaustion, and retry bypass</li>
+            <li>Correct use of <code>Math.pow(2, attempt - 1)</code> for backoff — avoids gateway overload on burst failures</li>
+          </ul>
+        </div>
+
+        <!-- Critical -->
+        <div class="review-section">
+          <div class="section-heading">🚨 Critical Issues</div>
+          <ul>
+            <li>
+              <strong><code>src/services/payment.service.ts:18</code></strong> —
+              <code>isNonRetryable</code> uses <code>err.message.includes(code)</code> to detect non-retryable errors.
+              If the payment gateway changes its error message wording, declined cards will be retried 3 times,
+              potentially causing <strong>duplicate charges in production</strong>. Use structured error codes instead.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Suggestions -->
+        <div class="review-section">
+          <div class="section-heading">⚠️ Suggestions</div>
+          <ul>
+            <li>Add jitter to the delay — <code>delay * (0.8 + Math.random() * 0.4)</code> — to avoid thundering herd when multiple payments fail at the same time</li>
+            <li><code>RetryExhaustedError</code> is never thrown — the loop re-throws <code>lastError</code> directly. Either remove the class or fix the control flow to use it</li>
+            <li>Log retry attempts at <code>warn</code> level for production observability</li>
+            <li>Expose <code>maxDelayMs</code> as an option to cap the delay in high-latency scenarios</li>
+          </ul>
+        </div>
+
+        <!-- Code suggestions -->
+        <div class="review-section">
+          <div class="section-heading">💡 Code Suggestions</div>
+          <p><strong>Use structured error codes instead of string matching:</strong></p>
+<pre><code><span class="kw">const</span> NON_RETRYABLE_CODES = <span class="kw">new</span> <span class="ty">Set</span>([
+  <span class="str">'card_declined'</span>,
+  <span class="str">'invalid_cvv'</span>,
+  <span class="str">'expired_card'</span>,
+  <span class="str">'insufficient_funds'</span>,
+]);
+
+<span class="kw">function</span> <span class="fn">isNonRetryable</span>(err: <span class="ty">unknown</span>): <span class="ty">boolean</span> {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> <span class="ty">GatewayError</span>) {
+    <span class="kw">return</span> NON_RETRYABLE_CODES.<span class="fn">has</span>(err.code); <span class="cm">// safe, code won't change silently</span>
+  }
+  <span class="kw">return false</span>;
+}</code></pre>
+          <p><strong>Add jitter to prevent thundering herd:</strong></p>
+<pre><code><span class="cm">// Before: const delay = baseDelayMs * Math.pow(2, attempt - 1);</span>
+<span class="kw">const</span> jitter = <span class="num">0.8</span> + Math.<span class="fn">random</span>() * <span class="num">0.4</span>; <span class="cm">// random between 80%–120%</span>
+<span class="kw">const</span> delay = baseDelayMs * Math.<span class="fn">pow</span>(<span class="num">2</span>, attempt - <span class="num">1</span>) * jitter;</code></pre>
+        </div>
+
+        <!-- Security -->
+        <div class="review-section">
+          <div class="section-heading">🔒 Security Checklist</div>
+          <table class="sec-table">
+            <tr><td>SQL Injection</td><td class="s-ok">✅ Not applicable</td></tr>
+            <tr><td>XSS / HTML Injection</td><td class="s-ok">✅ Not applicable</td></tr>
+            <tr><td>Secrets / credentials exposed</td><td class="s-ok">✅ None in diff</td></tr>
+            <tr><td>Input validation</td><td class="s-warn">⚠️ Fragile string matching in <code>isNonRetryable</code></td></tr>
+            <tr><td>Authentication / Authorization</td><td class="s-ok">✅ Not changed in this PR</td></tr>
+            <tr><td>Sensitive data in logs</td><td class="s-ok">✅ No sensitive data logged</td></tr>
+            <tr><td>Dependency vulnerabilities</td><td class="s-ok">✅ No new dependencies</td></tr>
+          </table>
+        </div>
+
+        <!-- Final score -->
+        <div class="review-section">
+          <div class="section-heading">📊 Final Assessment</div>
+          <div class="score-card">
+            <div>
+              <div class="score-label">Score</div>
+              <div class="score-num">7/10</div>
+              <div class="score-bar">
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-on"></div>
+                <div class="bar-seg bar-on"></div><div class="bar-seg bar-off"></div>
+                <div class="bar-seg bar-off"></div><div class="bar-seg bar-off"></div>
+              </div>
+            </div>
+            <div>
+              <div class="score-label">Verdict</div>
+              <div style="margin-top:4px"><span class="verdict-badge v-suggestions">⚠️ APPROVED WITH SUGGESTIONS</span></div>
+            </div>
+            <div class="stat-block">
+              <div class="score-label">Critical Issues</div>
+              <div class="stat-val stat-warn">1</div>
+            </div>
+            <div class="stat-block">
+              <div class="score-label">Review Time</div>
+              <div class="stat-val stat-dim">31s</div>
+            </div>
+          </div>
+          <p>Solid implementation that solves a real production problem. The only blocker is the string-based non-retryable detection — left unfixed, this can cause duplicate charges on declined cards. All other suggestions are non-blocking improvements.</p>
+        </div>
+
+        <!-- Inline comments -->
+        <div class="review-section">
+          <div class="section-heading">🔍 Inline Comments</div>
+          <div class="inline-comment">
+            <div class="file-ref">📄 src/services/payment.service.ts · line 18</div>
+            <div class="ic-body">⚠️ <code>err.message.includes(code)</code> is fragile — if the gateway changes its error wording, declined cards will be retried 3x. Use <code>err instanceof GatewayError && NON_RETRYABLE_CODES.has(err.code)</code> instead.</div>
+          </div>
+          <div class="inline-comment">
+            <div class="file-ref">📄 src/utils/retry.ts · line 38</div>
+            <div class="ic-body">This <code>throw</code> is unreachable — the original error is re-thrown inside the loop on the last attempt. Either remove <code>RetryExhaustedError</code> or fix the flow so it actually gets thrown.</div>
+          </div>
+        </div>
+
+        <hr />
+        <div class="comment-footer">
+          🕐 Reviewed at Tue, 22 Apr 2026 13:45:02 UTC &nbsp;·&nbsp;
+          Powered by <a href="#">Claude</a> via <a href="#">PR Review Bot</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Author credit -->
+  <div style="max-width:980px;margin:40px auto 0;text-align:center;padding:28px 0 10px">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#8b949e;margin-bottom:10px;font-weight:600">Built by</div>
+    <div style="font-size:28px;font-weight:800;background:linear-gradient(90deg,#58a6ff,#a371f7,#f778ba);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px">
+      Leonardo
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:#8b949e">
+      AI-powered code review for GitHub PRs &nbsp;·&nbsp; <a href="#" style="color:#58a6ff">github.com/leonardo</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

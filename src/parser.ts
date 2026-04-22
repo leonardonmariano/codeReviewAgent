@@ -7,7 +7,7 @@ interface RawInlineComment {
 }
 
 const SECTION_REGEX = {
-  critical: /## 🚨 Problemas Críticos\n([\s\S]*?)(?=\n## [✅⚠️💡🔒📊🔍]|$)/,
+  critical: /## 🚨 Problemas Críticos\n([\s\S]*?)(?=\n## |$)/,
   score: /\*\*Score:\*\*\s*(\d+)\s*\/\s*10/,
   verdict: /\*\*Veredicto:\*\*\s*(APPROVED_WITH_SUGGESTIONS|CHANGES_REQUESTED|APPROVED)/,
   inlineBlock: /## 🔍 Comentários Inline\s*```json\s*([\s\S]*?)\s*```/,
